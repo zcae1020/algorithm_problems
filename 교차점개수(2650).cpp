@@ -1,65 +1,42 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#define pii pair<int, int>
 
 using namespace std;
 
-int N, point[51][4], res = 0;
-
-//void swap(int idx) {
-//	vector<int> tmp;
-//	tmp.push_back(vertex[idx][0]);
-//	tmp.push_back(vertex[idx][1]);
-//	tmp.push_back(vertex[idx][2]);
-//	tmp.push_back(vertex[idx][3]);
-//	vertex[idx][0] = tmp[2];
-//	vertex[idx][1] = tmp[3];
-//	vertex[idx][2] = tmp[0];
-//	vertex[idx][3] = tmp[1];
-//}
-
-int isHigh(vector<int> twoPoint) {
-	if (twoPoint[0] == twoPoint[2]) { //같은 변
-		if (twoPoint[0] == 1 || twoPoint[0] == 2 || twoPoint[1] == twoPoint[3])
-			return 3; //높이 같음
-		else if (twoPoint[1] > twoPoint[3])
-			return 1;
-		else
-			return 2;
-	}
-	else { //다른 변
-
-	}
-	
-}
-
-int isLeft(vector<int> twoPoint) {
-
-}
-
-int checkCollision(int idx) {
-	int ret = 0, v1, v2;
-
-	for (int i = 0;i < N / 2;i++) {
-		
-	}
-	return ret;
-}
+int invert[5] = { 0,0,2,3,1 };
+vector<pii> p;
 
 int main() {
+	int N;
 	cin >> N;
 	for (int i = 0;i < N / 2;i++) {
-		for (int j = 0;j < 4;j++) {
-			cin >> point[i][j];
+		int a, b, c, d;
+		cin >> a >> b >> c >> d;
+		a = invert[a];
+		c = invert[c];
+		
+		int x = a * 51 + b, y = c * 51 + d;
+		if (a > 1) x += 51 - 2 * b;
+		if (c > 1) y += 51 - 2 * d;
+		p.emplace_back(min(x, y), max(x, y));
+	}
+
+	int res = 0, cross[51] = { 0 }, mx = 0, tmpmx;
+	for (int i = 0;i < N / 2;i++) {
+		for (int j = 0;j < N / 2;j++) {
+			int a, b, c, d;
+			a = p[i].first, b = p[i].second, c = p[j].first, d = p[j].second;
+			if ((a < c&&c < b&&b < d) || (c < a&&a < d&&d < b)) {
+				res++;
+				cross[i]++;
+				cross[j]++;
+				tmpmx = max(cross[i], cross[j]);
+				if (mx < tmpmx)
+					mx = tmpmx;
+			}
 		}
 	}
-
-	int tmp, mx = 0;
-	for (int i = 0;i < N / 2;i++) {
-		tmp = checkCollision(i);
-		if (tmp > mx)
-			mx = tmp;
-		res += tmp;
-	}
-
-	cout << res / 2 << '\n' << mx;
+	cout << res / 2 << endl << mx / 2;
 }
