@@ -5,102 +5,87 @@
 using namespace std;
 
 int N, M, x, y, K;
-int map[22][22], insts[1000];
-vector<int> dice(6);
+int MAP[20][20];
 
-/*
-  3
-4 0 5
-  1
-  2
-*/
+int dx[] = { 0, 0, -1, 1 };
+int dy[] = { 1, -1, 0, 0 };
 
-int up[4] = { 0,1,2,3 }, le[4] = { 0,4,2,5 };
+int Dice[7] = { 0 };
+
+int insts[1000];
 
 void init() {
-	for (int i = 0;i < 6;i++)
-		dice[i] = 0;
 	cin >> N >> M >> x >> y >> K;
-	for (int i = 0;i <= N + 1;i++) {
-		map[i][0] = -1;
-		map[i][M + 1] = -1;
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			cin >> MAP[i][j];
+		}
 	}
-	for (int i = 0;i <= M + 1;i++) {
-		map[0][i] = -1;
-		map[N + 1][i] = -1;
-	}
-	for (int i = 1;i <= N;i++)
-		for (int j = 1;j <= M;j++)
-			cin >> map[i][j];
-	for (int i = 0;i < K;i++)
+	for (int i = 0; i < K; i++)
+	{
 		cin >> insts[i];
+		insts[i]--;
+	}
 }
 
-pii roll(int inst, pii cur) {
-	vector<int> tmp;
-	vector<int> rot;
-	switch (inst) {
-	case 1:
-		for (int i = 0;i < 4;i++)
-			tmp.emplace_back(dice[le[i]]);
-		rot.emplace_back(tmp[3]);
-		for (int i = 0;i < 3;i++)
-			rot.emplace_back(tmp[i]);
-		cur.first++;
-		break;
-	case 2:
-		for (int i = 0;i < 4;i++)
-			tmp.emplace_back(dice[le[i]]);
-		for (int i = 1;i < 4;i++)
-			rot.emplace_back(tmp[i]);
-		rot.emplace_back(tmp[0]);
-		cur.first--;
-		break;
-	case 3:
-		for (int i = 0;i < 4;i++)
-			tmp.emplace_back(dice[up[i]]);
-		rot.emplace_back(tmp[3]);
-		for (int i = 0;i < 3;i++)
-			rot.emplace_back(tmp[i]);
-		cur.second--;
-		break;
-	case 4:
-		for (int i = 0;i < 4;i++)
-			tmp.emplace_back(dice[up[i]]);
-		for (int i = 1;i < 4;i++)
-			rot.emplace_back(tmp[i]);
-		rot.emplace_back(tmp[0]);
-		cur.second++;
-		break;
+void roll(int d) {
+	int d1, d2, d3, d4, d5, d6;
+	d1 = Dice[1], d2 = Dice[2], d3 = Dice[3];
+	d4 = Dice[4], d5 = Dice[5], d6 = Dice[6];
+
+	if (d == 0)
+	{
+		Dice[1] = d4;
+		Dice[4] = d6;
+		Dice[6] = d3;
+		Dice[3] = d1;
 	}
-	if (map[cur.second][cur.first] == -1) {
-		cur.first = -1, cur.second = -1;
-		return cur;
+	else if (d == 1)
+	{
+		Dice[4] = d1;
+		Dice[6] = d4;
+		Dice[3] = d6;
+		Dice[1] = d3;
 	}
-	if (inst > 2)
-		for (int i = 0;i < 4;i++)
-			dice[up[i]] = rot[i];
-	else
-		for (int i = 0;i < 4;i++)
-			dice[le[i]] = rot[i];
-	return cur;
+	else if (d == 2)
+	{
+		Dice[1] = d5;
+		Dice[2] = d1;
+		Dice[6] = d2;
+		Dice[5] = d6;
+	}
+	else if (d == 3)
+	{
+		Dice[5] = d1;
+		Dice[1] = d2;
+		Dice[2] = d6;
+		Dice[6] = d5;
+	}
 }
 
 int main() {
 	init();
-	pii cur = { x + 1, y + 1 };
-	for (int i = 0;i < K;i++) {
-		pii next = roll(insts[i], cur);
-		if (next.first == -1 && next.second == -1)
-			continue;
-		cur = next;
-		int curNum = map[cur.second][cur.first];
-		if (curNum) {
-			dice[0] = curNum;
-			map[cur.second][cur.first] = 0;
-		}
+	for (int i = 0; i < K; i++)
+	{
+		int inst = insts[i];
+		int nx = x + dx[inst];
+		int ny = y + dy[inst];
+
+		if (nx < 0 || ny < 0 || nx >= N || ny >= M) continue;
+
+		roll(inst);
+		if (!MAP[nx][ny]) MAP[nx][ny] = Dice[6];
 		else
-			map[cur.second][cur.first] = dice[0];
-		cout << dice[2] << endl;
+		{
+			Dice[6] = MAP[nx][ny];
+			MAP[nx][ny] = 0;
+		}
+
+		cout << Dice[1] << endl;
+
+		x = nx;
+		y = ny;
 	}
 }
