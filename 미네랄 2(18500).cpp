@@ -76,7 +76,6 @@ void getClusterAndDown(pii des) {
 			cluster.push_back(n);
 			q.push(n);
 			visit[n.first][n.second] = true;
-			bool isGround = false;
 
 			while (!q.empty()) {
 				pii cur = q.front();
