@@ -2,6 +2,7 @@
 *.user
 *.filters
 *.exe
+input.txt
 
 .vscode/
 Debug/
