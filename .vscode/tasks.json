@@ -1,0 +1,90 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "g++ build and run active file",
+            "command": "C:/mingw64/bin/g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${file}",
+                "-o",
+                "${fileBasenameNoExtension};",
+                "Get-Content",
+                "${workspaceFolder}/input.txt",
+                "|",
+                "./${fileBasenameNoExtension}",
+                "del",
+                "${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "C:/mingw64/bin"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "C/C++: g++.exe 활성 파일 빌드",
+            "command": "C:/mingw64/bin/g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${file}",
+                "-o",
+                "${workspaceFolder}/${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "C:/mingw64/bin"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build",
+            "detail": "컴파일러: C:/mingw64/bin/g++.exe"
+        },
+        {
+            "type": "shell",
+            "label": "run file",
+            "command": "${workspaceFolder}/${fileBasenameNoExtension}.exe",
+            "args": [
+            ],
+            "options": {
+                "cwd": "C:/mingw64/bin"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "none",
+                "isDefault": true
+            },
+        },
+        {
+            "type": "shell",
+            "label": "del file",
+            "command": "del",
+            "args": [
+                "${workspaceFolder}/${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "C:/mingw64/bin"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "none",
+                "isDefault": true
+            }
+        }
+    ]
+}
