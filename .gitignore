@@ -2,6 +2,7 @@
 *.user
 *.filters
 *.exe
+exercise.cpp
 input.txt
 
 Debug/
