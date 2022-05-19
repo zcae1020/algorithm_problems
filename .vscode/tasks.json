@@ -18,7 +18,7 @@
                 "|",
                 "./${fileBasenameNoExtension}",
                 "del",
-                "${fileBasenameNoExtension}.exe"
+                "/${fileBasenameNoExtension}.exe"
             ],
             "options": {
                 "cwd": "C:/mingw64/bin"
@@ -31,6 +31,34 @@
                 "isDefault": true
             }
         },
+        // {
+        //     "type": "shell",
+        //     "label": "g++ build and run active file",
+        //     "command": "C:/mingw64/bin/g++.exe",
+        //     "args": [
+        //         "-fdiagnostics-color=always",
+        //         "-g",
+        //         "${file}",
+        //         "-o",
+        //         "${fileBasenameNoExtension};",
+        //         "Get-Content",
+        //         "${workspaceFolder}/input.txt",
+        //         "|",
+        //         "./${fileBasenameNoExtension}",
+        //         "del",
+        //         "../${fileBasenameNoExtension}.exe"
+        //     ],
+        //     "options": {
+        //         "cwd": "C:/mingw64/bin"
+        //     },
+        //     "problemMatcher": [
+        //         "$gcc"
+        //     ],
+        //     "group": {
+        //         "kind": "test",
+        //         "isDefault": true
+        //     }
+        // },
         {
             "type": "shell",
             "label": "C/C++: g++.exe 활성 파일 빌드",
