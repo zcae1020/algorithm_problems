@@ -1,75 +1,68 @@
 #include <iostream>
 #include <vector>
-#define pii pair<int, int>
+#include <set>
 
 using namespace std;
 
 int n;
-vector<int> cnt;
-vector<pii> a, b;
+vector<int> a, b;
+multiset<int> ms;
 
 void Input()
 {
     cin >> n;
 
-    cnt.clear();
     a.clear();
     b.clear();
-    cnt.resize(n + 100);
+    ms.clear();
 
     int tmp;
     for (int i = 0; i < n; i++)
     {
         cin >> tmp;
-        if (a.size() && a.back().first == tmp)
-            a.back().second++;
-        else
-            a.push_back({tmp, 1});
+        a.push_back(tmp);
     }
     for (int i = 0; i < n; i++)
     {
         cin >> tmp;
-        if (b.size() && b.back().first == tmp)
-            b.back().second++;
-        else
-            b.push_back({tmp, 1});
+        b.push_back(tmp);
     }
 }
 
 void Solution()
 {
-    for (int i = 0; i < b.size(); i++)
-    {
-        if (a.empty())
-        {
-            cout << "NO\n";
-            return;
-        }
+    int aidx, bidx;
+    aidx = bidx = n - 1;
 
-        if (a[0].first == b[i].first)
+    while (bidx >= 0)
+    {
+        if (a[aidx] == b[bidx])
         {
-            a[0].second += cnt[a[0].first];
-            cnt[a[0].first] = 0;
-            if (a[0].second == b[i].second)
-                a.erase(a.begin());
-            else if (a[0].second > b[i].second)
-                a[0].second -= b[i].second;
-            else
+            int cur = b[bidx];
+            bidx--, aidx--;
+            while (bidx >= 0 && cur == b[bidx])
             {
-                b[i].second -= a[0].second;
-                a.erase(a.begin());
-                i--;
+                ms.insert(cur);
+                bidx--;
             }
         }
         else
         {
-            cnt[a[0].first] += a[0].second;
-            a.erase(a.begin());
-            i--;
+            if (ms.count(a[aidx]))
+            {
+                ms.erase(ms.lower_bound(a[aidx]));
+                aidx--;
+            }
+            else
+            {
+                cout << "NO\n";
+                return;
+            }
         }
     }
 
     cout << "YES\n";
+    return;
 }
 
 int main()
