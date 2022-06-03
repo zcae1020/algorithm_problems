@@ -6,38 +6,82 @@
 
 using namespace std;
 
+bool check(string s)
+{
+    for (int i = 0; i < s.size() / 2; i++)
+        if (s[i] != s[s.size() - 1 - i])
+            return false;
+    return true;
+}
+
 void Solution()
 {
-    set<string> s1, s2;
+    vector<string> v;
     int n;
+    bool isPL = false;
 
     cin >> n;
     for (int i = 0; i < n; i++)
     {
         string a;
         cin >> a;
-        s1.insert(a);
+        v.push_back(a);
+        if (check(a))
+            isPL = true;
     }
 
-    for (auto a : s1)
+    if (isPL)
     {
-        reverse(a.begin(), a.end());
-        s2.insert(a);
-        if (a.size() < 3)
-            for (char c = 'a'; c <= 'z'; c++)
-                s2.insert(c + a);
+        cout << "YES\n";
+        return;
     }
 
-    for (auto a : s1)
+    set<string> ss2, ss22, ss3;
+
+    for (int i = 0; i < v.size(); i++)
     {
-        if (s2.count(a))
+        string s;
+
+        if (v[i].size() == 2)
         {
-            cout << "YES\n";
-            return;
+            if (ss2.count(v[i]))
+            {
+                isPL = true;
+                break;
+            }
+
+            s = v[i];
+            reverse(s.begin(), s.end());
+            ss2.insert(s);
+            ss22.insert(s);
+        }
+        else
+        {
+            if (ss22.count(v[i].substr(1, 2)))
+            {
+                isPL = true;
+                break;
+            }
+            if (ss3.count(v[i]))
+            {
+                isPL = true;
+                break;
+            }
+
+            s = v[i].substr(0, 2);
+            reverse(s.begin(), s.end());
+            ss2.insert(s);
+
+            s = v[i];
+            reverse(s.begin(), s.end());
+            ss3.insert(s);
         }
     }
 
-    cout << "NO\n";
+    if (isPL)
+        cout << "YES\n";
+    else
+        cout << "NO\n";
 }
 
 int main()
@@ -48,37 +92,3 @@ int main()
     while (tc--)
         Solution();
 }
-
-
-// 7
-// 5
-// zx
-// ab
-// cc
-// zx
-// ba
-// 2
-// ab
-// bad
-// 4
-// co
-// def
-// orc
-// es
-// 3
-// a
-// b
-// c
-// 3
-// ab
-// cd
-// cba
-// 2
-// ab
-// ab
-// 5
-// zab
-// cdd
-// cb
-// az
-// bz
