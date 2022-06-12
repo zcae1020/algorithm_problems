@@ -1,65 +1,67 @@
 #include <bits/stdc++.h>
-#define FASTIO ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
-#define pii pair<int, int>
-#define ll long long
-#define llu unsigned long long
+using namespace std ;
+typedef unsigned long long ull ;
+typedef long long ll ;
+typedef pair < ll, ll > P ;
+const ll Maxn = 2e5 + 10;
+const int Mod = 1e9 + 7  ;
+const int INF = 0x3f3f3f3f ;
 
-using namespace std;
+ll n, t ;
+vector < ll > ve;
+ll T[Maxn << 4] , ans, sum[Maxn << 1], a[Maxn] ;
 
-const int MAX = 2e5 + 10;
+ll getId(ll x){
+    return lower_bound(ve.begin(), ve.end(), x) - ve.begin() + 1 ;
+}
 
-int n, arr[MAX], ans;
-map<ll,int> m;
-multiset<ll> ms;
-ll sarr[MAX], t;
+void Updata (ll p, ll v, ll ri, ll l , ll r){
+    T[ri] += v ;
+    if (l == r) return ;
+    ll Mid = (l + r) >> 1 ;
+    if (p <= Mid) Updata(p, v, ri << 1 , l, Mid) ;
+    else Updata(p, v, ri << 1 | 1, Mid + 1, r) ;
+}
 
-void Solution()
-{
-    cin >> n >> t;
-    for (int i = 0; i < n; i++)
-        cin >> arr[i];
-
-    sarr[0] = arr[0];
-    ms.insert(sarr[0]);
-    for (int i = 1; i < n; i++)
-    {
-        sarr[i] = sarr[i - 1] + arr[i];
-        ms.insert(sarr[i]);
+void lessSum(ll pos, ll ri, ll l, ll r){
+    if (l == r) return ;
+    ll Mid = (l + r) >> 1 ;
+    if (pos <= Mid) lessSum(pos, ri << 1, l, Mid) ;
+    else {
+        ans += T[ri << 1] ;
+        lessSum(pos, ri << 1 | 1, Mid + 1, r) ;
     }
+}
 
-    ll p = -1e16;
-    for(auto a: ms){
-        if(p==-1e16)
-            m[a]=ms.count(a);
-        else
-            m[a]=m[p]+ms.count(a);
-        p = a;
+int main() {
+    cin >> n >> t ;
+    for (ll i = 1; i <= n; i++){
+        cin >> a[i] ;
+        sum[i] = sum[i - 1] + a[i] ;
+        ve.push_back(sum[i]) ;
     }
-
-    for (auto a : ms)
-    {
-        if (a < t)
-            ans += ms.count(a);
-        else
-            break;
+    if (n == 1) {
+        if (a[1] < t) cout << 1 << endl ;
+        else cout << 0 << endl ;
     }
-
-    for (int i = 0; i < n; i++)
-    {
-        ms.erase(ms.find(sarr[i]));
-        for (auto a : ms)
-        {
-            if (a - sarr[i] < t)
-                ans += ms.count(a);
-            else
-                break;
+    else {
+        for (ll i = 1; i <= n; i++){
+            ll x = sum[i] + t ;
+            ve.push_back(x) ;
         }
+        sort(ve.begin(), ve.end()) ;
+        ve.erase(unique(ve.begin(), ve.end()), ve.end()) ;
+        ll len = ve.size() ;
+        Updata(getId(sum[n]), 1, 1, 1, len) ;
+        for (ll i = n - 1; i >= 0; i--){
+            ll x = sum[i] + t ;
+            lessSum(getId(x), 1, 1, len) ;
+            Updata(getId(sum[i]), 1, 1, 1, len) ;
+        }
+        cout << ans << endl ;
     }
-    cout << ans;
+    return 0;
 }
 
-int main()
-{
-    FASTIO
-    Solution();
-}
+//psum[r] < psum[l-1] + t
+//weight segment tree
