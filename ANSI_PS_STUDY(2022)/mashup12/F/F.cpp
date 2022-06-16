@@ -1,38 +1,43 @@
 #include <bits/stdc++.h>
 #define FASTIO ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
-#define pii pair<int,int>
+#define pii pair<int, int>
 #define ll long long
 #define llu unsigned long long
 
 using namespace std;
 
-const int maxn = 100;
+const int maxn = 2e5 + 10;
 
-int n,arr[maxn], sarr[maxn], ans;
+int n;
+ll psum[maxn];
+map<ll, int> m;
 
-void Solution() {
-    cin>>n;
-    for(int i=0;i<n;i++)
-        cin>>arr[i];
-
-    sarr[0] = 0;
-    for(int i=1;i<=n;i++){
-        sarr[i] = sarr[i-1]+arr[i];
-        if(!sarr[i]) break;
-        ans++;
+void Solution()
+{
+    cin >> n;
+    for (int i = 2; i <= n + 1; i++)
+    {
+        int a;
+        cin >> a;
+        psum[i] = psum[i - 1] + a;
     }
 
-    sarr[n] = 0;
-    for(int i=n-1;i>=0;i--){
-        sarr[i] = sarr[i+1]+arr[i];
-        if(!sarr[i]) break;
-        ans++;
+    m[0] = 1;
+    int cnt_max = 0;
+    ll ans = 0;
+    for (int i = 2; i <= n + 1; i++)
+    {
+        ll num = psum[i];
+        cnt_max = max(cnt_max, m[num]);
+        ans += i - cnt_max - 1;
+        m[num] = i;
     }
 
-    cout<<ans;
+    cout << ans;
 }
 
-int main() {
+int main()
+{
     FASTIO
     Solution();
 }
