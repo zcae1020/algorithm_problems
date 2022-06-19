@@ -1,146 +1,85 @@
 #include <bits/stdc++.h>
+// #include <ext/pb_ds/assoc_container.hpp>
+// #include <ext/pb_ds/tree_policy.hpp>
 #define FASTIO ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
 #define pii pair<int, int>
 #define ll long long
 #define llu unsigned long long
 
 using namespace std;
+//using namespace __gnu_pbds;
+
+//#define ordered_set tree<int, null_type,less<int>, rb_tree_tag,tree_order_statistics_node_update>
 
 const int maxn = 1e5 + 10;
 
-int rcnt[maxn], ccnt[maxn];
-pii rconti[maxn], cconti[maxn];
+int n, q, xcnt[maxn], ycnt[maxn];
+// ordered_set sx, sy;
+
+class segtree
+{
+public:
+    bool tree[4 * maxn] = {false};
+    bool update(int node, int s, int e, int target, bool diff)
+    {
+        if (target < s || e < target)
+            return tree[node];
+        if (s == e)
+            return tree[node] = diff;
+        int mid = (s + e) / 2;
+        bool left = update(2 * node, s, mid, target, diff),
+             right = update(2 * node + 1, mid + 1, e, target, diff);
+
+        return tree[node] = left && right;
+    }
+    bool getAns(int node, int s, int e, int l, int r)
+    {
+        if (e < l || r < s)
+            return true;
+        if (l <= s && e <= r)
+            return tree[node];
+        int mid = (s + e) / 2;
+        bool left = getAns(2 * node, s, mid, l, r),
+             right = getAns(2 * node + 1, mid + 1, e, l, r);
+        return left && right;
+    }
+} segx, segy;
 
 void Solution()
 {
-    int n, q;
     cin >> n >> q;
     while (q--)
     {
         int t, x1, x2, y1, y2;
         cin >> t;
-        switch (t)
+        if (t == 1)
         {
-        case 1:
             cin >> x1 >> y1;
-
-            if (rcnt[x1] == 0)
-            {
-                if (x1 + 1 <= n && x1 - 1 > 0 && rcnt[x1 + 1] && rcnt[x1 - 1])
-                {
-                    pii cur = {rconti[x1 - 1].first, rconti[x1 + 1].second};
-                    for (int i = rconti[x1 - 1].first; i <= rconti[x1 + 1].second; i++)
-                        rconti[i] = cur;
-                }
-                else if (x1 + 1 <= n && rcnt[x1 + 1])
-                {
-                    pii cur = {x1, rconti[x1 + 1].second};
-                    for (int i = x1; i <= rconti[x1 + 1].second; i++)
-                        rconti[i] = cur;
-                }
-                else if (x1 - 1 > 0 && rcnt[x1 - 1])
-                {
-                    pii cur = {rconti[x1 - 1].first, x1};
-                    for (int i = rconti[x1 - 1].first; i <= x1; i++)
-                        rconti[i] = cur;
-                }
-                else
-                    rconti[x1] = {x1, x1};
-            }
-            rcnt[x1]++;
-
-            if (ccnt[y1] == 0)
-            {
-                if (y1 + 1 <= n && y1 - 1 > 0 && ccnt[y1 + 1] && ccnt[y1 - 1])
-                {
-                    pii cur = {cconti[y1 - 1].first, cconti[y1 + 1].second};
-                    for (int i = cconti[y1 - 1].first; i <= cconti[y1 + 1].second; i++)
-                        cconti[i] = cur;
-                }
-                else if (y1 + 1 <= n && ccnt[y1 + 1])
-                {
-                    pii cur = {y1, cconti[y1 + 1].second};
-                    for (int i = y1; i <= cconti[y1 + 1].second; i++)
-                        cconti[i] = cur;
-                }
-                else if (y1 - 1 > 0 && ccnt[y1 - 1])
-                {
-                    pii cur = {cconti[y1 - 1].first, y1};
-                    for (int i = cconti[y1 - 1].first; i <= y1; i++)
-                        cconti[i] = cur;
-                }
-                else
-                    cconti[y1] = {y1, y1};
-            }
-            ccnt[y1]++;
-
-            break;
-        case 2:
+            if (xcnt[x1] == 0)
+                segx.update(1, 1, n, x1, 1);
+            if (ycnt[y1] == 0)
+                segy.update(1, 1, n, y1, 1);
+            xcnt[x1]++;
+            ycnt[y1]++;
+        }
+        else if (t == 2)
+        {
             cin >> x1 >> y1;
-
-            rcnt[x1]--;
-            if (rcnt[x1] == 0)
-            {
-                if (x1 + 1 <= n && x1 - 1 > 0 && rcnt[x1 + 1] && rcnt[x1 - 1])
-                {
-                    pii l = {rconti[x1 - 1].first, x1 - 1},
-                        r = {x1 + 1, rconti[x1 + 1].second};
-                    for (int i = rconti[x1 - 1].first; i <= x1 - 1; i++)
-                        rconti[i] = l;
-                    for (int i = x1 + 1; i <= rconti[x1 + 1].second; i++)
-                        rconti[i] = r;
-                }
-                else if (x1 + 1 <= n && rcnt[x1 + 1])
-                {
-                    pii cur = {x1 + 1, rconti[x1 + 1].second};
-                    for (int i = x1 + 1; i <= rconti[x1 + 1].second; i++)
-                        rconti[i] = cur;
-                }
-                else if (x1 - 1 > 0 && rcnt[x1 - 1])
-                {
-                    pii cur = {rconti[x1 - 1].first, x1 - 1};
-                    for (int i = rconti[x1 - 1].first; i <= x1 - 1; i++)
-                        rconti[i] = cur;
-                }
-                rconti[x1] = {0, 0};
-            }
-
-            ccnt[y1]--;
-            if (ccnt[y1] == 0)
-            {
-                if (y1 + 1 <= n && y1 - 1 > 0 && ccnt[y1 + 1] && ccnt[y1 - 1])
-                {
-                    pii l = {cconti[y1 - 1].first, y1 - 1},
-                        r = {y1 + 1, cconti[y1 + 1].second};
-                    for (int i = cconti[y1 - 1].first; i <= y1 - 1; i++)
-                        cconti[i] = l;
-                    for (int i = y1 + 1; i <= cconti[y1 + 1].second; i++)
-                        cconti[i] = r;
-                }
-                else if (y1 + 1 <= n && ccnt[y1 + 1])
-                {
-                    pii cur = {y1 + 1, cconti[y1 + 1].second};
-                    for (int i = y1 + 1; i <= cconti[y1 + 1].second; i++)
-                        cconti[i] = cur;
-                }
-                else if (y1 - 1 > 0 && ccnt[y1 - 1])
-                {
-                    pii cur = {cconti[y1 - 1].first, y1 - 1};
-                    for (int i = cconti[y1 - 1].first; i <= y1 - 1; i++)
-                        cconti[i] = cur;
-                }
-                cconti[y1] = {0, 0};
-            }
-
-            break;
-        case 3:
+            xcnt[x1]--;
+            ycnt[y1]--;
+            if (xcnt[x1] == 0)
+                segx.update(1, 1, n, x1, 0);
+            if (ycnt[y1] == 0)
+                segx.update(1, 1, n, x1, 0);
+        }
+        else
+        {
             cin >> x1 >> y1 >> x2 >> y2;
 
-            if ((rconti[x1] != pii(0, 0) && rconti[x1] == rconti[x2]) || (cconti[y1] != pii(0, 0) && cconti[y1] == cconti[y2]))
+            if (segx.getAns(1, 1, n, x1, x2) || segy.getAns(1, 1, n, y1, y2))
                 cout << "Yes\n";
             else
                 cout << "No\n";
-            break;
         }
     }
 }
