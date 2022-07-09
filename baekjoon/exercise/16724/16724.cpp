@@ -8,7 +8,6 @@ using namespace std;
 
 int n, m, visited[1005][1005], vidx, ans;
 string MAP[1005];
-bool addAns;
 
 void Solution()
 {
@@ -18,12 +17,11 @@ void Solution()
 
     for (int i = 0; i < n; i++)
     {
-        for (int j = 0; j < n; j++)
+        for (int j = 0; j < m; j++)
         {
             if (!visited[i][j])
             {
                 vidx++;
-                addAns = false;
                 queue<pii> q;
                 q.push({i, j});
 
@@ -34,12 +32,8 @@ void Solution()
 
                     if (visited[c.first][c.second])
                     {
-                        if (!addAns && visited[c.first][c.second] == vidx)
-                        {
+                        if (visited[c.first][c.second] == vidx)
                             ans++;
-                            fjsda
-                            //addAns = true;
-                        }
                         continue;
                     }
 
