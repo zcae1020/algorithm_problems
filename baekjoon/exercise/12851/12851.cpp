@@ -8,46 +8,48 @@ using namespace std;
 
 const int maxs = 1e5 + 10;
 
-fjdsksafd
-//nonsolve
-
-int visited[maxs], n, k, T = maxs, cnt;
+int n, k, tans = maxs, cnt, visited[maxs];
 queue<pii> q;
 
-
+int dx[3] = {-1, 1, 0};
 
 void Solution()
 {
     cin >> n >> k;
-    q.push({n, 0});
+
+    q.push({n, 1});
+    visited[n] = 1;
     while (q.size())
     {
         int c = q.front().first;
         int t = q.front().second;
         q.pop();
 
+        if (tans < t)
+            break;
+
         if (c == k)
         {
-            if (T == t)
-                cnt++;
-            else if (t < T)
-            {
-                T = t;
-                cnt = 1;
-            }
+            tans = min(tans, t);
+            cnt++;
             continue;
         }
 
-        if (T < t || c < 0 || c >= maxs || visited[c])
-            continue;
-
-        visited[c] = 1;
-        q.push({c + 1, t + 1});
-        q.push({c - 1, t + 1});
-        q.push({2 * c, t + 1});
+        int next;
+        for (int i = 0; i < 3; i++)
+        {
+            next = c + dx[i];
+            if (i == 2)
+                next = 2 * c;
+            if (0 <= next && next < maxs && (!visited[next] || visited[next] >= t + 1))
+            {
+                q.push({next, t + 1});
+                visited[next] = t + 1;
+            }
+        }
     }
 
-    cout << T << '\n'
+    cout << tans - 1 << '\n'
          << cnt;
 }
 
