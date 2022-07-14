@@ -4,6 +4,8 @@ echo "#include <bits/stdc++.h>
 #define pii pair<int,int>
 #define ll long long
 #define llu unsigned long long
+#define x first
+#define y second
 
 using namespace std;
 
