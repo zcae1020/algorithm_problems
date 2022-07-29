@@ -11,18 +11,15 @@ using namespace std;
 const int maxn = 1e5 + 10;
 
 int N, A[maxn], indeg[maxn];
-vector<int> ans, z;
+vector<int> ans;
 bool visited[maxn];
-fjsdlkajf
+
 void dfs(int cur)
 {
-    ans.push_back(cur);
-
-    if (!visited[cur])
-    {
-        visited[cur] = 1;
+    visited[cur] = 1;
+    ans.push_back(A[cur]);
+    if (!visited[A[cur]])
         dfs(A[cur]);
-    }
 }
 
 void Solution()
@@ -34,16 +31,15 @@ void Solution()
         indeg[A[i]]++;
     }
 
-    visited[1] = 1;
-    dfs(A[1]);
+    dfs(1);
 
     for (int i = 2; i <= N; i++)
-        if (!indeg[i])
-            z.push_back(i);
+        if (!visited[i] && !indeg[i])
+            ans.push_back(i), dfs(i);
 
-    for (int i = 1; i <= N; i++)
+    for (int i = 2; i <= N; i++)
         if (!visited[i])
-            dfs(i);
+            ans.push_back(i), dfs(i);
 
     cout << ans.size() << '\n';
     for (auto a : ans)
