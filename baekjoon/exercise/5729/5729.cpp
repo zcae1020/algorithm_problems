@@ -8,55 +8,72 @@
 
 using namespace std;
 
+int n, a[10004], sum, mx;
+bool p;
+
+bool isAns(int dist, int start, int need)
+{
+    bool changeStart = false;
+    int s = start, e = start + 1, su = a[start], cnt = 0;
+
+    while (e != start)
+    {
+        if (dist == su)
+        {
+            if (!changeStart)
+            {
+                start = e;
+                changeStart = true;
+            }
+            cnt++;
+            s = e;
+            su = 0;
+        }
+        else if (dist < su)
+        {
+            su -= a[s];
+            s = (s + 1) % n;
+        }
+        else
+        {
+            su += a[e];
+            e = (e + 1) % n;
+        }
+    }
+
+    return cnt == need;
+}
+
 void Solution()
 {
     while (1)
     {
-        int n, a[10000], sum = 0;
-        scanf("%d", &n);
+        sum = 0, mx = 0, p = 0;
+        cin >> n;
         if (n == 0)
             break;
-        for (int i = 0; i < n; i++){
-            scanf("%d", &a[i]);
-            sum+=a[i];
+        for (int i = 0; i < n; i++)
+        {
+            cin >> a[i];
+            sum += a[i];
+            mx = max(mx, a[i]);
         }
 
-        bool isAns = 1;
-        int ans = 0;
-        for(int i=n;i>2;i--){
-            if(sum%i==0){
-                int dist = sum/i;
-                ans = 0;
-
-                for(int j=0;j<n;j++){
-                    for(int k=0;k<n;k++){
-                        
-                    }
-                }             
-
-                if (cur >= dist)
+        for (int i = n; i > 2; i--)
+        {
+            if (sum % i == 0 && sum / i >= mx)
+            {
+                if (isAns(sum / i, 0, i))
                 {
-                    int p = 0;
-                    while (p < dist)
-                    {
-                        ans++;
-                        p += s.top();
-                        s.pop();
-                    }
-                    cur -= p;
-                    ans--;
-                    if (p > dist)
-                    {
-                        isAns = 0;
-                        break;
-                    }
-                }
-
-                if(isAns)
+                    p = 1;
+                    cout << n - i;
                     break;
+                }
             }
         }
-        cout<<(isAns&&n-ans>2?ans:-1)<<'\n';
+        if (!p)
+            cout << -1;
+        cout << '\n';
     }
 }
 
