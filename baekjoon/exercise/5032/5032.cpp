@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 #define FASTIO ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
-#define pii pair<int,int>
+#define pii pair<int, int>
 #define ll long long
 #define llu unsigned long long
 #define x first
@@ -8,19 +8,26 @@
 
 using namespace std;
 
-int x,y,d,t;
+int e, f, c, ans;
 
-void Solution() {
-    cin>>x>>y>>d>>t;
-    
-    int s = x*x+y*y;
-    if(d/(double)t<=1){
-        
+void Solution()
+{
+    cin >> e >> f >> c;
+
+    e += f;
+    while (e >= c)
+    {
+        int n = e / c;
+        ans += n;
+        e %= c;
+        e += n;
     }
-    for(int i)
+
+    cout << ans;
 }
 
-int main() {
+int main()
+{
     FASTIO
     Solution();
 }
