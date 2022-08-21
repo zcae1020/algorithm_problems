@@ -9,24 +9,27 @@
 using namespace std;
 
 string s;
-int ans;
+int dp[40];
 
-void dfs(int idx)
+int dfs(int idx)
 {
+    int ret = 0;
     if (idx < 0)
-    {
-        ans++;
-        return;
-    }
+        return 1;
+
+    if (dp[idx])
+        return dp[idx];
 
     if (s[idx] != '0')
-        dfs(idx - 1);
+        ret += dfs(idx - 1);
     if (idx > 0 && s[idx - 1] != '0')
     {
         int n = (s[idx - 1] - '0') * 10 + s[idx] - '0';
         if (n < 35)
-            dfs(idx - 2);
+            ret += dfs(idx - 2);
     }
+
+    return dp[idx] = ret;
 }
 
 void Solution()
@@ -35,7 +38,7 @@ void Solution()
 
     dfs(s.size() - 1);
 
-    cout << ans;
+    cout << dp[s.size() - 1];
 }
 
 int main()
