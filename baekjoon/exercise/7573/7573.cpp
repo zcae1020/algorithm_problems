@@ -8,10 +8,10 @@
 
 using namespace std;
 
-int N, I, M, m[10001][10001];
-vector<pii> v;
+const int maxn = 10;
 
-int dx[4] = {1, 1, -1, -1}, dy[4] = {1, -1, 1, -1};
+int N, I, M, ans = 1;
+vector<pii> v;
 
 void Solution()
 {
@@ -20,26 +20,29 @@ void Solution()
     {
         int a, b;
         cin >> a >> b;
-        m[a][b]++;
-        for(int )
+        v.push_back({a, b});
     }
 
-    for (auto p : v)
+    sort(v.begin(), v.end());
+
+    for (int h = 1, w = I / 2 - 1; h < I / 2; h++, w--)
     {
-        for (int i = 1; i < I / 2; i++)
+        for (int i = 0; i < v.size(); i++)
         {
-            for (int j = 0; j < 4; j++)
+            int cx = v[i].x, cy = v[i].y;
+            if (cx + h > N)
+                break;
+            for (int sy = cy - w, ey = cy; sy <= cy; sy++, ey++)
             {
-                int maxx = p.x + dx[j] * i, maxy = p.y + dy[j] * (I / 2 - i);
-                if (maxx <= N && maxx > 0 && maxy <= N && maxy > 0)
-                {
-                    int cnt = 0;
-                    for (int x = p.x; (dx[j] > 0 && x <= maxx) || (dx[j] < 0 && x >= maxx); x += dx[j])
-                        for (int y = p.y; (dy[j] > 0 && y <= maxy) || (dy[j] < 0 && y >= maxy); y += dy[j])
-                            if (m[x][y])
-                                cnt++;
-                    ans = max(ans, cnt);
-                }
+                if (sy < 1 || ey > N)
+                    continue;
+
+                int cnt = 1;
+                for (int j = i + 1; j < v.size(); j++)
+                    if (cx <= v[j].x && v[j].x <= cx + h && sy <= v[j].y && v[j].y <= ey)
+                        cnt++;
+
+                ans = max(ans, cnt);
             }
         }
     }
