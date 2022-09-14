@@ -8,24 +8,22 @@
 
 using namespace std;
 
-int N, M, L, ans = 1e9;
+int N, M, L, ans = 1000;
 vector<int> hu, dist;
 
-void dfs(int idx, int prevSize, int remain, int mx)
+bool check(int len)
 {
-    if (idx == -1)
+    int sum = 0;
+    for (auto d : dist)
     {
-        ans = min(ans, mx);
-        return;
-    }
-    for (int i = remain; i >= 0; i--)
-    {
-        if (i <= prevSize)
+        if (len <= d)
         {
-            int nmx = max(mx, dist[idx] / (i + 1) + (dist[idx] % (i + 1) > 0));
-            dfs(idx - 1, i, remain - i, nmx);
+            sum += d / len;
+            sum += (d % len > 0);
+            sum--;
         }
     }
+    return sum <= M;
 }
 
 void Solution()
@@ -48,7 +46,18 @@ void Solution()
 
     sort(dist.begin(), dist.end());
 
-    dfs(dist.size() - 1, M, M, 0);
+    int l = 1, r = 500;
+    while (l <= r)
+    {
+        int mid = (l + r) / 2;
+        if (check(mid))
+        {
+            ans = min(ans, mid);
+            r = mid - 1;
+        }
+        else
+            l = mid + 1;
+    }
 
     cout << ans;
 }
