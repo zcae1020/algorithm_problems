@@ -3,7 +3,9 @@
         "iosfwd": "cpp",
         "iostream": "cpp",
         "ratio": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "typeindex": "c",
+        "typeinfo": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
