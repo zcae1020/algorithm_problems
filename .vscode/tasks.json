@@ -18,7 +18,7 @@
                 "|",
                 "./${fileBasenameNoExtension}",
                 "del",
-                "/${fileBasenameNoExtension}.exe"
+                "./${fileBasenameNoExtension}"
             ],
             "options": {
                 "cwd": "C:/mingw64/bin"
