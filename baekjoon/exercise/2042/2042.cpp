@@ -54,3 +54,9 @@ int main()
     FASTIO
     Solution();
 }
+
+// high = 1; // high는 자식노드 첫번째 index: segtree는 1부터 시작되기 때문
+// while(high <n) high <<= 1;
+// for(int i=0;i<n;i++) {
+//     cin>>tree+high+i;
+// }
