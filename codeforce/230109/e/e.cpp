@@ -34,8 +34,6 @@ void Solution()
             cin >> k[i];
         }
  
-        sort(k, k + q);
- 
         int idx = 1;
         for (int i = 0; i < q; i++)
         {
