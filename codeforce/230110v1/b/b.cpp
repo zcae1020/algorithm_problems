@@ -10,15 +10,18 @@
 using namespace std;
  
 int t,tc,n,k;
- 
+
+vector<vector<int>> v;
+map<int, int> cnt;
+
 const int maxn =2e5+10;
  
 void Solution() {
     cin>>t;
     while(t--) {
         bool ans = false;
-        int cnt[maxn] = {0};
-        vector<vector<int>> v;
+        v.clear();
+        cnt.clear();
  
         cin>>tc;
         for(int i=0;i<tc;i++) {
