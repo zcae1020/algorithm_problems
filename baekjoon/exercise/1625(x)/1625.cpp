@@ -8,9 +8,10 @@
 
 using namespace std;
 
-const int maxn = 10;
+const int maxn = 500;
 
 int N,M,prevMap[maxn][maxn], curMap[maxn][maxn];
+int originPMap[maxn][maxn], originCMap[maxn][maxn];
 int prevOneCnt[maxn], curOneCnt[maxn];
 
 vector<int> changeRow;
@@ -18,7 +19,7 @@ vector<pii> changeCol;
 
 bool isEqualColumn(pii p) {
     for(int i=0;i<N;i++) {
-        if(prevMap[i][p.fs] != curMap[i][p.sd]) {
+        if(curMap[i][p.fs] != prevMap[i][p.sd]) {
             return false;
         }
     }
@@ -53,22 +54,43 @@ bool changeColumn() {
     return true;
 }
 
+void copyMap() {
+    for(int i=0;i<N;i++) {
+        for(int j=0;j<M;j++) {
+            prevMap[i][j] = originPMap[i][j];
+            curMap[i][j] = originCMap[i][j];
+        }
+    }
+}
+
+void printAns() {
+    cout<<changeRow.size()+changeCol.size()<<'\n';
+    for(auto a: changeRow) {
+        cout<<0<<' '<<a<<'\n';
+    }
+    for(auto a: changeCol) {
+        cout<<1<<' '<<a.fs<<' '<<a.sd<<'\n';
+    }
+}
+
 void Solution() {
     cin>>N>>M; // input
     for(int i=0;i<2;i++) {
         for(int j=0;j<N;j++) {
             for(int k=0;k<M;k++) {
                 if(i) {
-                    cin>>curMap[j][k];
-                    curOneCnt[j]+=curMap[j][k];
+                    cin>>originCMap[j][k];
+                    curOneCnt[j]+=originCMap[j][k];
                 }
                 else {
-                    cin>>prevMap[j][k];
-                    prevOneCnt[j]+=prevMap[j][k];
+                    cin>>originPMap[j][k];
+                    prevOneCnt[j]+=originPMap[j][k];
                 }
             }
         }
     }
+
+    copyMap();
 
     for(int i=0;i<N;i++) { // row
         if(prevOneCnt[i] == M - curOneCnt[i]) {
@@ -83,20 +105,34 @@ void Solution() {
         }
     }
 
-    bool flag = changeColumn(); //col
+    if(changeColumn()) {
+        printAns();
+        return;
+    }
 
-    if(!flag) {
-        cout<<-1;
+    copyMap();
+    changeRow.clear();
+    changeCol.clear();
+
+    for(int i=0;i<N;i++) { // row: 갯수가 뒤집거나 안뒤집거나 똑같음
+        if(prevOneCnt[i] == M - curOneCnt[i]) {
+            if(prevOneCnt[i] == curOneCnt[i]) {
+                continue;
+            }
+
+            for(int j=0;j<M;j++) {
+                prevMap[i][j] = prevMap[i][j] ? 0:1;
+            }
+            changeRow.push_back(i+1);
+        }
+    }
+
+    if(changeColumn()) {
+        printAns();
         return;
     } 
-    
-    cout<<changeRow.size()+changeCol.size()<<'\n';
-    for(auto a: changeRow) {
-        cout<<0<<' '<<a<<'\n';
-    }
-    for(auto a: changeCol) {
-        cout<<1<<' '<<a.fs<<' '<<a.sd<<'\n';
-    }
+
+    cout<<-1;
 }
 
 int main() {
