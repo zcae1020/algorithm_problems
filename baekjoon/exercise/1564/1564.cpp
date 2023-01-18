@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 #define FASTIO ios::sync_with_stdio(false), cin.tie(NULL), cout.tie(NULL);
 #define pii pair<int,int>
 #define ll long long
@@ -8,7 +9,7 @@
 
 using namespace std;
 
-const ll maxn = 1e10;
+const ll maxn = 1e12; // 오로지 12여야만함
 int n;
 ll fact = 1;
 
