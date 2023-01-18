@@ -8,9 +8,8 @@
 
 using namespace std;
 
-const int maxn = 1e6;
-int n, arr[maxn], x;
-ll ans = 0;
+const int maxn = 1e5;
+int n, arr[maxn], x, ans;
 
 void Solution() {
     cin>>n;
@@ -22,12 +21,13 @@ void Solution() {
     sort(arr, arr+n);
 
     int l = 0, r = n-1;
-    while(l<=r) {
-        if(arr[l]+arr[r] == x) {
+    while(l<r) {
+        int sum = arr[l]+arr[r];
+        if(sum == x) {
             ans++;
             l++;
         }
-        else if(arr[l]+arr[r] > x) {
+        else if(sum > x) {
             r--;
         }
         else {
