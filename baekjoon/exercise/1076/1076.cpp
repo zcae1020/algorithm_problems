@@ -31,7 +31,7 @@ void Solution() {
             continue;
         }
         if (i == 2) {
-            if(ans == 0) {
+            if (ans == 0) {
                 continue;
             }
             cout << ans;
